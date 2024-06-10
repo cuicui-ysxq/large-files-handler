@@ -38,10 +38,16 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 		return
 	}
 
-	// ensure that the output directory exists
-	err = os.MkdirAll(outDir, 0755)
-	if err != nil {
-		return
+	// if `outDir` is not specified, use current working directory
+	if outDir == "" {
+		outDir = "."
+	} else {
+		// otherwise, ensure that the output directory exists
+		// if it does not exist, create it
+		err = os.MkdirAll(outDir, 0755)
+		if err != nil {
+			return
+		}
 	}
 
 	// split the input file
