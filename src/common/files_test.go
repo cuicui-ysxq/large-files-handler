@@ -16,6 +16,12 @@ const (
 	chunkSize      uint16 = 1 << 5
 )
 
+func TestNormalizeSingleFileSize(t *testing.T) {
+	assert.Equal(t, common.NormalizeSingleFileSize(0), common.GitHubMaxRecommendedFileSize)
+	assert.Equal(t, common.NormalizeSingleFileSize(common.GitHubMaxFileSize), common.GitHubMaxFileSize)
+	assert.Equal(t, common.NormalizeSingleFileSize(common.GitHubMaxFileSize+1), common.GitHubMaxFileSize)
+}
+
 func generateUint8Bytes() (allData [numUint8Values]byte, smallChunks [][chunkSize]byte) {
 	var smallBuff [chunkSize]byte
 	for i := uint16(0); i < numUint8Values; i++ {
