@@ -67,7 +67,7 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 				}
 			}
 			if n == 0 {
-				return
+				return // do not write empty files
 			}
 
 			// create output file
