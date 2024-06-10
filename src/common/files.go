@@ -66,7 +66,6 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 
 			// create output file
 			outFilePath := filepath.Join(outDir, fmt.Sprintf("%s.%s%d", basename, SplitSuffix, i))
-			fmt.Println(outFilePath)
 			outFile, err := os.Create(outFilePath)
 			if err != nil {
 				return
