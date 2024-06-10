@@ -1,6 +1,7 @@
 package common_test
 
 import (
+	"fmt"
 	"math"
 	"os"
 	"path/filepath"
@@ -14,6 +15,8 @@ import (
 const (
 	numUint8Values uint16 = math.MaxUint8 + 1
 	chunkSize      uint16 = 1 << 5
+
+	randomFilePath string = "/dev/urandom"
 )
 
 func TestNormalizeSingleFileSize(t *testing.T) {
@@ -72,5 +75,73 @@ func TestSplitFile(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, slices.Equal(smallChunks[i][:], outBuff), "slices not equal")
 		}
+	}
+}
+
+func getRandomData(size uint, outFilePath string) (data []byte, err error) {
+	data = make([]byte, size)
+
+	randomFile, err := os.Open(randomFilePath)
+	if err != nil {
+		return
+	}
+	defer randomFile.Close()
+
+	n, err := randomFile.Read(data)
+	if err != nil {
+		return
+	}
+	if uint(n) != size {
+		err = fmt.Errorf("read %d bytes, expected %d bytes", n, size)
+		return
+	}
+
+	outFile, err := os.Create(outFilePath)
+	if err != nil {
+		return
+	}
+	defer outFile.Close()
+
+	n, err = outFile.Write(data)
+	if err != nil {
+		return
+	}
+	if uint(n) != size {
+		err = fmt.Errorf("written %d bytes, expected %d bytes", n, size)
+		return
+	}
+
+	return
+}
+
+func TestSplitRandomData(t *testing.T) {
+	singleChunkSize := 50 * common.MB
+	totalDataSize := singleChunkSize * 5
+
+	_, dir := GetFileAndDir()
+	testDir := filepath.Join(dir, "../test")
+
+	// write random data to the test input file
+	testInputFile := filepath.Join(testDir, "random")
+	defer os.Remove(testInputFile)
+	data, err := getRandomData(totalDataSize, testInputFile)
+	assert.NilError(t, err)
+
+	// get output files
+	outFilePaths, err := common.SplitFile(testInputFile, singleChunkSize, testDir)
+	defer func() {
+		for _, outFilePath := range outFilePaths {
+			os.Remove(outFilePath)
+		}
+	}()
+	assert.NilError(t, err)
+	// check the output files
+	offset := uint(0)
+	for _, outFilePath := range outFilePaths {
+		buffer, err := os.ReadFile(outFilePath)
+		assert.NilError(t, err)
+		assert.Assert(t, slices.Equal(data[offset:offset+singleChunkSize], buffer), "slices not equal")
+
+		offset += singleChunkSize
 	}
 }
