@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"testing"
 
@@ -18,6 +19,13 @@ const (
 
 	randomFilePath string = "/dev/urandom"
 )
+
+func GetFileAndDir() (file, dir string) {
+	_, file, _, _ = runtime.Caller(1)
+	dir = filepath.Dir(file)
+
+	return
+}
 
 func TestSplitZeroSizeChunk(t *testing.T) {
 	_, err := common.SplitFile("", 0, "")
