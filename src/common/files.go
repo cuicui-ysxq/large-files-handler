@@ -7,19 +7,12 @@ import (
 	"path/filepath"
 )
 
-// If `singleFileSize` is 0, use `GitHubMaxRecommendedFileSize` as single file size;
-// Otherwise, ensure that the file size is never larger than `GitHubMaxFileSize`.
-func NormalizeSingleFileSize(singleFileSize FileSize) FileSize {
-	if singleFileSize == 0 {
-		return GitHubMaxRecommendedFileSize
-	} else {
-		return min(singleFileSize, GitHubMaxFileSize)
-	}
-}
-
+// Split files into chunks of the specified size.
 func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []string, err error) {
-	// ensure the single file size is never greater than GitHub's limits
-	chunkSize = NormalizeSingleFileSize(chunkSize)
+	if chunkSize == 0 {
+		err = fmt.Errorf("chunk size must be greater than 0")
+		return
+	}
 
 	// open input file
 	file, err := os.Open(filePath)

@@ -19,12 +19,6 @@ const (
 	randomFilePath string = "/dev/urandom"
 )
 
-func TestNormalizeSingleFileSize(t *testing.T) {
-	assert.Equal(t, common.NormalizeSingleFileSize(0), common.GitHubMaxRecommendedFileSize)
-	assert.Equal(t, common.NormalizeSingleFileSize(common.GitHubMaxFileSize), common.GitHubMaxFileSize)
-	assert.Equal(t, common.NormalizeSingleFileSize(common.GitHubMaxFileSize+1), common.GitHubMaxFileSize)
-}
-
 func generateUint8Bytes() (allData [numUint8Values]byte, smallChunks [][chunkSize]byte) {
 	var smallBuff [chunkSize]byte
 	for i := uint16(0); i < numUint8Values; i++ {
@@ -115,11 +109,10 @@ func getRandomData(size uint, outFilePath string) (data []byte, err error) {
 }
 
 func TestSplitRandomData(t *testing.T) {
-	singleChunkSize := 50 * common.MB
+	singleChunkSize := 100 * common.MB
 	totalDataSize := singleChunkSize * 5
 
-	_, dir := GetFileAndDir()
-	testDir := filepath.Join(dir, "../test")
+	testDir := ""
 
 	// write random data to the test input file
 	testInputFile := filepath.Join(testDir, "random")
