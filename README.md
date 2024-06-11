@@ -10,5 +10,5 @@ go run . -i <input_file> -s <chunk_size> -o <output_dir>
 ```
 
 * `input_file`：输入文件（**必填**）
-* `chunk_size`：分块大小，单位：字节（**选填**，如未填则为 49MB，比 GitHub 单文件大小限制 50MB 小 1MB）
+* `chunk_size`：分块大小，单位：字节（**选填**，如未填则为 49 MB，比 GitHub 单文件大小限制 50 MB 小 1 MB）
 * `output_dir`：输出目录（**选填**，如未填则为当前目录）
