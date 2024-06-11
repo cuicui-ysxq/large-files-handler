@@ -151,3 +151,37 @@ func TestSplitRandomData(t *testing.T) {
 		offset += singleChunkSize
 	}
 }
+
+func TestMergeFiles(t *testing.T) {
+	_, dir := GetFileAndDir()
+	testDir := filepath.Join(dir, "../test")
+
+	tests := []struct {
+		inputFilename string
+		content       []byte
+	}{
+		{"digits", []byte("0123456789")},
+		{"capital-letters", []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ")},
+		{"small-letters", []byte("abcdefghijklmnopqrstuvwxyz")},
+	}
+	inputFilePaths := make([]string, len(tests))
+	totalBytes := 0
+	for i, test := range tests {
+		// create input file
+		inputFilePath := filepath.Join(testDir, test.inputFilename)
+		inputFilePaths[i] = inputFilePath
+		defer os.Remove(inputFilePath)
+
+		err := os.WriteFile(inputFilePath, test.content, 0644)
+		assert.NilError(t, err)
+		totalBytes += len(test.content)
+	}
+
+	outputFilePath := filepath.Join(testDir, "merged")
+	defer os.Remove(outputFilePath)
+
+	// merge files
+	n, err := common.MergeFiles(inputFilePaths, 128, outputFilePath)
+	assert.NilError(t, err)
+	assert.Equal(t, n, uint(totalBytes))
+}
