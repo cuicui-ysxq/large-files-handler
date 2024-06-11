@@ -15,14 +15,14 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 	}
 
 	// open input file
-	file, err := os.Open(filePath)
+	inputFile, err := os.Open(filePath)
 	if err != nil {
 		return
 	}
-	defer file.Close()
+	defer inputFile.Close()
 
 	// ensure that the input file is a regular file
-	stat, err := file.Stat()
+	stat, err := inputFile.Stat()
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 		// each output file is closed after writing to it has been completed
 		err = func() (err error) {
 			// read input file
-			n, err := file.Read(buff)
+			n, err := inputFile.Read(buff)
 			if err != nil {
 				if err == io.EOF {
 					eof = true
