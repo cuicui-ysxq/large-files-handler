@@ -19,6 +19,11 @@ const (
 	randomFilePath string = "/dev/urandom"
 )
 
+func TestSplitZeroSizeChunk(t *testing.T) {
+	_, err := common.SplitFile("", 0, "")
+	assert.ErrorContains(t, err, "chunk size must be greater than 0")
+}
+
 func generateUint8Bytes() (allData [numUint8Values]byte, smallChunks [][chunkSize]byte) {
 	var smallBuff [chunkSize]byte
 	for i := uint16(0); i < numUint8Values; i++ {
