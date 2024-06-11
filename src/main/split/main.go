@@ -16,7 +16,7 @@ var args struct {
 
 func init() {
 	flag.StringVar(&args.inputFilePath, "i", "", "input file path")
-	flag.UintVar(&args.chunkSize, "s", 0, "chunk size")
+	flag.UintVar(&args.chunkSize, "s", common.GitHubMaxRecommendedFileSize, "chunk size in bytes")
 	flag.StringVar(&args.outDir, "d", "", "output directory")
 
 	flag.Parse()
