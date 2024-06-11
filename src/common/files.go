@@ -7,10 +7,6 @@ import (
 	"path/filepath"
 )
 
-const (
-	DefaultReadBufferSize uint = 16 * MB
-)
-
 // Split files into chunks of the specified size.
 func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []string, err error) {
 	if chunkSize == 0 {

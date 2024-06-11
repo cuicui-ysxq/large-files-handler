@@ -17,3 +17,7 @@ const (
 const (
 	SplitSuffix string = "part"
 )
+
+const (
+	DefaultReadBufferSize uint = 16 * MB
+)
