@@ -91,7 +91,7 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 // Merge files into a single file.
 // The contents of the input files are read into a buffer chunk by chunk, and then copied to the output file.
 // If buffer size is set to 0, then the `DefaultReadBufferSize` is used.
-func MergeFiles(filenames []string, bufferSize uint, outFilePath string) (n uint, err error) {
+func MergeFiles(filenames []string, bufferSize uint, outFilePath string) (bytesWritten uint, err error) {
 	if bufferSize == 0 {
 		bufferSize = DefaultReadBufferSize
 	}
@@ -104,7 +104,6 @@ func MergeFiles(filenames []string, bufferSize uint, outFilePath string) (n uint
 	defer outputFile.Close()
 
 	// read from each input file
-	n = 0
 	buff := make([]byte, bufferSize)
 	for _, filePath := range filenames {
 		// use an inner function so that
@@ -129,7 +128,7 @@ func MergeFiles(filenames []string, bufferSize uint, outFilePath string) (n uint
 
 			// copy input file content to output file
 			bytesCopied, err := io.CopyBuffer(outputFile, inputFile, buff)
-			n += uint(bytesCopied)
+			bytesWritten += uint(bytesCopied)
 
 			return
 		}()
