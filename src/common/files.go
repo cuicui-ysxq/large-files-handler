@@ -7,6 +7,16 @@ import (
 	"path/filepath"
 )
 
+// Create a file if not exists, or truncate the file if it already exists
+// If the directory holding the file does not exist, create it first before creating the file
+func CreateOrTruncateFile(filePath string) (*os.File, error) {
+	dir := filepath.Dir(filePath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return nil, err
+	}
+	return os.Create(filePath)
+}
+
 // Split files into chunks of the specified size.
 func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []string, err error) {
 	if chunkSize == 0 {
@@ -65,7 +75,7 @@ func SplitFile(filePath string, chunkSize uint, outDir string) (outFilePaths []s
 
 			// create output file
 			outFilePath := filepath.Join(outDir, fmt.Sprintf("%s.%s%d", basename, SplitSuffix, i))
-			outFile, err := os.Create(outFilePath)
+			outFile, err := CreateOrTruncateFile(outFilePath)
 			if err != nil {
 				return
 			}
@@ -97,7 +107,7 @@ func MergeFiles(filenames []string, bufferSize uint, outFilePath string) (bytesW
 	}
 
 	// create output file
-	outputFile, err := os.Create(outFilePath)
+	outputFile, err := CreateOrTruncateFile(outFilePath)
 	if err != nil {
 		return
 	}
