@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/cuicui-yxsq/large-files-handler/common"
+	"github.com/cuicui-ysxq/large-files-handler/common"
 	"gotest.tools/assert"
 )
 

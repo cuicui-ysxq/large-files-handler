@@ -1,4 +1,4 @@
-module github.com/cuicui-yxsq/large-files-handler
+module github.com/cuicui-ysxq/large-files-handler
 
 go 1.22.4
 

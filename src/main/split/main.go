@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cuicui-yxsq/large-files-handler/args"
-	"github.com/cuicui-yxsq/large-files-handler/common"
+	"github.com/cuicui-ysxq/large-files-handler/args"
+	"github.com/cuicui-ysxq/large-files-handler/common"
 )
 
 func main() {

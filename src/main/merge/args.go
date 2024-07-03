@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/cuicui-yxsq/large-files-handler/common"
+	"github.com/cuicui-ysxq/large-files-handler/common"
 )
 
 type (
