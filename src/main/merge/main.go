@@ -10,7 +10,9 @@ import (
 
 func main() {
 	var a Args
-	args.ParseAndCheckArgs(&a, 1)
+	if hasErrs := args.ParseAndCheckArgs(&a); hasErrs {
+		os.Exit(1)
+	}
 
 	n, err := common.MergeFiles(a.inputFilePaths, a.bufferSize, a.outputFilePath)
 	if err != nil {

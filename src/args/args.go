@@ -11,7 +11,7 @@ type Args interface {
 	Check() (errs []error)
 }
 
-func ParseAndCheckArgs(args Args, exitCode int) {
+func ParseAndCheckArgs(args Args) (hasErrs bool) {
 	args.DefineArgs()
 
 	if !flag.Parsed() {
@@ -19,13 +19,15 @@ func ParseAndCheckArgs(args Args, exitCode int) {
 	}
 
 	errs := args.Check()
-	if len(errs) > 0 {
+	hasErrs = len(errs) > 0
+	if hasErrs {
 		flag.Usage()
 
 		fmt.Fprintln(os.Stderr, "Error(s):")
 		for _, err := range errs {
 			fmt.Fprintln(os.Stderr, "-", err)
 		}
-		os.Exit(exitCode)
 	}
+
+	return
 }

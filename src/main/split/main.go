@@ -10,7 +10,9 @@ import (
 
 func main() {
 	var a Args
-	args.ParseAndCheckArgs(&a, 1)
+	if hasErrs := args.ParseAndCheckArgs(&a); hasErrs {
+		os.Exit(1)
+	}
 
 	outFiles, err := common.SplitFile(a.inputFilePath, a.chunkSize, a.outDir)
 	if err != nil {
