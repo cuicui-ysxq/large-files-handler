@@ -4,14 +4,14 @@ type FileSize = uint
 
 const (
 	KB FileSize = 1 << 10
-	MB          = KB << 10
-	GB          = MB << 10
+	MB FileSize = KB << 10
+	GB FileSize = MB << 10
 )
 
 const (
 	GitHubMaxFileSize            FileSize = 99 * MB
-	GitHubMaxRecommendedFileSize          = 49 * MB
-	GithubRepoMaxSize                     = 1 * GB
+	GitHubMaxRecommendedFileSize FileSize = 49 * MB
+	GithubRepoMaxSize            FileSize = 1 * GB
 )
 
 const (
@@ -19,5 +19,5 @@ const (
 )
 
 const (
-	DefaultReadBufferSize uint = 16 * MB
+	DefaultReadBufferSize FileSize = 16 * MB
 )
